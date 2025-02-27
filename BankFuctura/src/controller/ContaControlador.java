@@ -2,13 +2,12 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 import model.ContaCorrente;
 import model.ContaPoupanca;
 
-public class ControladorConta {
+public class ContaControlador {
 
 	private static Scanner scan = new Scanner(System.in);
 	private static List<ContaCorrente> listaCC = new ArrayList<>();
@@ -21,22 +20,13 @@ public class ControladorConta {
 	private static String cpf = "";
 	private static String numeroConta = "";
 
-	// Método para gerar de forma aleatorizada o numero de conta com 4 dígitos
-
-	public static String gerarNumeroConta() {
-		Random r = new Random();
-		int numero = r.nextInt(9999);
-		String num = String.format("%04d", numero);
-		return num;
-	}
-
 	// Méotodo para cadastrar uma nova conta
 
-	public static void iniciarCadastro() {
+	public void iniciarSessao() {
 		System.out.println("Olá, seja bem vindo(a) ao FucturaBank. Vamos realizar seu cadastro.");
 		System.out.print("\nDigite seu nome completo: ");
 		nome = scan.nextLine();
-		
+
 		String[] primeiroNome = nome.split(" ");
 
 		System.out.print("\nOlá " + primeiroNome[0] + "! Agora digite seu CPF (somente números): ");
@@ -74,7 +64,7 @@ public class ControladorConta {
 				if (buscar.getCpf().equalsIgnoreCase(cpf)) {
 					System.out.println("Esse CPF já está cadastrado em Conta Corrente.");
 					buscar.exibirDados();
-					exibirMenu();
+					view.Principal.exibirMenu();
 				}
 			}
 		}
@@ -83,7 +73,7 @@ public class ControladorConta {
 				if (achar.getCpf().equalsIgnoreCase(cpf)) {
 					System.out.println("Esse CPF já está cadastrado em Conta Poupança.");
 					achar.exibirDados();
-					exibirMenu();
+					view.Principal.exibirMenu();
 				}
 			}
 		}
@@ -106,7 +96,7 @@ public class ControladorConta {
 				scan.nextLine();
 			}
 
-			cc = new ContaCorrente(ControladorConta.gerarNumeroConta(), nome, cpf, valor);
+			cc = new ContaCorrente(ContaCorrente.gerarNumeroConta(), nome, cpf, valor);
 			listaCC.add(cc);
 			System.out.println("\n-----CONTA CORRENTE CADASTRADA COM SUCESSO-----");
 		}
@@ -119,65 +109,14 @@ public class ControladorConta {
 				scan.nextLine();
 			}
 
-			cp = new ContaPoupanca(ControladorConta.gerarNumeroConta(), nome, cpf, valor);
+			cp = new ContaPoupanca(ContaPoupanca.gerarNumeroConta(), nome, cpf, valor);
 			listaCP.add(cp);
 			System.out.println("\n-----CONTA POUPANÇA CADASTRADA COM SUCESSO-----");
 		}
 
 		}
 
-		exibirMenu();
-
-	}
-
-	// Método para exibir o menu exibir as opções disponiveis com suas respectivas
-	// chamadas
-
-	public static void exibirMenu() {
-		System.out.println("\n----- MENU PRINCIPAL-----");
-		System.out.println("1. Cadastrar Nova Conta");
-		System.out.println("2. Sacar");
-		System.out.println("3. Depositar");
-		System.out.println("4. Aplicar Dinheiro");
-		System.out.println("5. Resgatar Dinheiro");
-		System.out.println("6. Detalhes da Conta");
-		System.out.println("0. Sair");
-
-		System.out.print("\nDigite a opção desejada: ");
-		opcao = scan.nextInt();
-		scan.nextLine();
-
-		while (opcao > 6 || opcao < 0) {
-
-			System.out.print("Opção inválida. Digite novamente: ");
-			opcao = scan.nextInt();
-			scan.nextLine();
-		}
-
-		switch (opcao) {
-		case 1 -> {
-			iniciarCadastro();
-		}
-		case 2 -> {
-			iniciarSaque();
-		}
-		case 3 -> {
-			iniciarDeposito();
-		}
-		case 4 -> {
-			iniciarAplicacao();
-		}
-		case 5 -> {
-			iniciarResgate();
-		}
-		case 6 -> {
-			iniciarExibicao();
-		}
-		case 0 -> {
-			System.out.println("\n-----FIM DA SESSÃO-----");
-			System.exit(0);
-		}
-		}
+		view.Principal.exibirMenu();
 
 	}
 
@@ -187,7 +126,7 @@ public class ControladorConta {
 	 * um valor válido
 	 */
 
-	public static void iniciarSaque() {
+	public void iniciarSaque() {
 		System.out.print("\nDigite o numero da Conta Corrente: ");
 		numeroConta = scan.next();
 
@@ -204,7 +143,7 @@ public class ControladorConta {
 			}
 		}
 		System.out.println("\n-----SAQUE REALIZADO COM SUCESSO-----");
-		exibirMenu();
+		view.Principal.exibirMenu();
 	}
 
 	/*
@@ -213,7 +152,7 @@ public class ControladorConta {
 	 * notificar.
 	 */
 
-	public static void iniciarExibicao() {
+	public void iniciarExibicao() {
 		System.out.println("\nDigite o seu CPF: ");
 		cpf = scan.nextLine();
 
@@ -236,7 +175,7 @@ public class ControladorConta {
 		}
 
 		System.out.println("\n-----FIM DA EXIBIÇÃO-----");
-		exibirMenu();
+		view.Principal.exibirMenu();
 	}
 
 	/*
@@ -245,28 +184,36 @@ public class ControladorConta {
 	 * programa irá notificar
 	 */
 
-	public static void iniciarAplicacao() {
+	public void iniciarAplicacao() {
 		System.out.println("\nDigite o número do CPF: ");
-		cpf = scan.next();
+		String cpf = scan.next();
+
+		boolean temContaCorrente = false;
+		boolean temContaPoupanca = false;
 
 		for (ContaPoupanca buscar : listaCP) {
 			if (buscar.getCpf().equalsIgnoreCase(cpf)) {
+				temContaPoupanca = true;
 				for (ContaCorrente achar : listaCC) {
 					if (achar.getCpf().equalsIgnoreCase(cpf)) {
+						temContaCorrente = true;
 						System.out.print("Digite o valor a ser aplicado: R$");
-						valor = scan.nextDouble();
+						double valor = scan.nextDouble();
 						buscar.aplicar(achar, valor);
-					} else {
-						System.out.println("\nEsse CPF não possui Conta Corrente cadastrada.");
+						System.out.println("\n-----DINHEIRO APLICADO COM SUCESSO-----");
+						view.Principal.exibirMenu();
+						return;
 					}
 				}
-			} else {
-				System.out.print("\nEsse CPF não possui Conta Poupança cadastrada.");
 			}
 		}
-
-		System.out.println("\n-----DINHEIRO APLICADO COM SUCESSO-----");
-		exibirMenu();
+		if (temContaPoupanca && !temContaCorrente) {
+			System.out.println("\nEsse CPF não possui Conta Corrente cadastrada.");
+			view.Principal.exibirMenu();
+		} else if (!temContaPoupanca) {
+			System.out.println("\nEsse CPF não possui Conta Poupança cadastrada.");
+			view.Principal.exibirMenu();
+		}
 	}
 
 	/*
@@ -274,7 +221,7 @@ public class ControladorConta {
 	 * igual a zero, o programa notificará um erro de valor inválido.
 	 */
 
-	public static void iniciarDeposito() {
+	public void iniciarDeposito() {
 		System.out.print("\nDigite o número da sua Conta Corrente: ");
 		numeroConta = scan.nextLine();
 
@@ -291,7 +238,7 @@ public class ControladorConta {
 		}
 
 		System.out.println("\n-----DEPOSITO REALIZADO COM SUCESSO-----");
-		exibirMenu();
+		view.Principal.exibirMenu();
 	}
 
 	/*
@@ -300,7 +247,7 @@ public class ControladorConta {
 	 * notificará um erro.
 	 */
 
-	public static void iniciarResgate() {
+	public void iniciarResgate() {
 		System.out.print("\nDigite o numero do seu CPF: ");
 		cpf = scan.next();
 
@@ -313,15 +260,17 @@ public class ControladorConta {
 						buscar.resgatar(achar, valor);
 					} else {
 						System.out.println("\nEsse CPF não possui Conta Corrente cadastrada.");
+						view.Principal.exibirMenu();
 					}
 				}
 			} else {
 				System.out.print("\nEsse CPF não possui Conta Poupança cadastrada.");
+				view.Principal.exibirMenu();
 			}
 		}
 
 		System.out.println("\n-----FIM DO RESGATE-----");
-		exibirMenu();
+		view.Principal.exibirMenu();
 	}
 
 }

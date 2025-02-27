@@ -22,6 +22,8 @@ public abstract class Conta {
 		this.saldo = saldo;
 	}
 
+	// Método para gerar de forma aleatorizada o numero de conta com 4 dígitos
+
 	public String getNumeroConta() {
 		return numeroConta;
 	}
