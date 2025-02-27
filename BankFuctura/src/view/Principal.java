@@ -1,3 +1,6 @@
+/*Aluno: Thyago Antonio Sampaio Valadares
+ * Turma: Módulo 1 - Java - TER/QUI */
+
 package view;
 
 import controller.ControladorConta;
