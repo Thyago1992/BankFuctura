@@ -1,14 +1,14 @@
-package Controller;
+package controller;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import Model.ContaCorrente;
-import Model.ContaPoupanca;
+import model.ContaCorrente;
+import model.ContaPoupanca;
 
-public class MenuRepository {
+public class ControladorConta {
 
 	private static Scanner scan = new Scanner(System.in);
 	private static List<ContaCorrente> listaCC = new ArrayList<>();
@@ -17,7 +17,7 @@ public class MenuRepository {
 	private static ContaPoupanca cp;
 	private static int opcao = 0;
 	private static double valor = 0;
-	private static String nome = "";
+	private static String nome;
 	private static String cpf = "";
 	private static String numeroConta = "";
 
@@ -35,8 +35,8 @@ public class MenuRepository {
 	public static void iniciarCadastro() {
 		System.out.println("Olá, seja bem vindo(a) ao FucturaBank. Vamos realizar seu cadastro.");
 		System.out.print("\nDigite seu nome completo: ");
-
 		nome = scan.nextLine();
+		
 		String[] primeiroNome = nome.split(" ");
 
 		System.out.print("\nOlá " + primeiroNome[0] + "! Agora digite seu CPF (somente números): ");
@@ -106,7 +106,7 @@ public class MenuRepository {
 				scan.nextLine();
 			}
 
-			cc = new ContaCorrente(MenuRepository.gerarNumeroConta(), nome, cpf, valor);
+			cc = new ContaCorrente(ControladorConta.gerarNumeroConta(), nome, cpf, valor);
 			listaCC.add(cc);
 			System.out.println("\n-----CONTA CORRENTE CADASTRADA COM SUCESSO-----");
 		}
@@ -119,7 +119,7 @@ public class MenuRepository {
 				scan.nextLine();
 			}
 
-			cp = new ContaPoupanca(MenuRepository.gerarNumeroConta(), nome, cpf, valor);
+			cp = new ContaPoupanca(ControladorConta.gerarNumeroConta(), nome, cpf, valor);
 			listaCP.add(cp);
 			System.out.println("\n-----CONTA POUPANÇA CADASTRADA COM SUCESSO-----");
 		}

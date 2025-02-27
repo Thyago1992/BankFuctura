@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public class ContaCorrente extends Conta implements Tarifavel {
 
@@ -27,10 +27,10 @@ public class ContaCorrente extends Conta implements Tarifavel {
 	// Método serve para transferir um valor da conta corrente para a conta
 	// poupanca.
 
-	/*
-	 * public void aplicar(ContaPoupanca destino, double valor) { sacar(valor);
-	 * destino.depositar(valor); }
-	 */
+	public void aplicar(ContaPoupanca destino, double valor) {
+		sacar(valor);
+		destino.depositar(valor);
+	}
 
 	/*
 	 * Método requerido pela interface Tarifavel para aplicar uma taxa para cada
