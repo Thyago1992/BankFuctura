@@ -23,8 +23,8 @@ public class ContaPoupanca extends Conta {
 	// Método serve para transferir um valor da conta corrente para a conta
 	// poupanca.
 
-	public void aplicar(ContaCorrente destino, double valor) {
-		destino.sacar(valor);
+	public void aplicar(ContaCorrente origem, double valor) {
+		origem.alterarSaldo(origem.getSaldo() - valor);
 		novoSaldo = getSaldo() + valor;
 		alterarSaldo(novoSaldo);
 	}

@@ -23,7 +23,7 @@ public class ContaControlador {
 	// Méotodo para cadastrar uma nova conta
 
 	public void iniciarSessao() {
-		System.out.println("Olá, seja bem vindo(a) ao FucturaBank. Vamos realizar seu cadastro.");
+		System.out.println("\nOlá, seja bem vindo(a) ao FucturaBank. Vamos realizar seu cadastro.");
 		System.out.print("\nDigite seu nome completo: ");
 		nome = scan.nextLine();
 
@@ -46,7 +46,7 @@ public class ContaControlador {
 		 * ele cria uma nova conta bancária
 		 */
 
-		System.out.println("Você deseja abrir uma Conta Corrente ou uma Conta Poupança?");
+		System.out.println("\nVocê deseja abrir uma Conta Corrente ou uma Conta Poupança?");
 		System.out.println("\n1. Conta Corrente\n2. Conta Poupança");
 		System.out.print("\nEscolha a opção desejada: ");
 		opcao = scan.nextInt();
@@ -153,25 +153,37 @@ public class ContaControlador {
 	 */
 
 	public void iniciarExibicao() {
+		scan.nextLine();
 		System.out.println("\nDigite o seu CPF: ");
 		cpf = scan.nextLine();
 
+		boolean temContaCorrente = false;
+		boolean temContaPoupanca = false;
+
+		// Verifica Conta Corrente
 		for (ContaCorrente buscar : listaCC) {
 			if (buscar.getCpf().equalsIgnoreCase(cpf)) {
 				buscar.exibirDados();
 				System.out.println("Tipo: Conta Corrente");
-			} else {
-				System.out.println("\nEsse CPF não possui conta corrente cadastrada");
+				temContaCorrente = true;
 			}
 		}
 
+		// Verifica Conta Poupança
 		for (ContaPoupanca buscar : listaCP) {
 			if (buscar.getCpf().equalsIgnoreCase(cpf)) {
 				buscar.exibirDados();
 				System.out.println("Tipo: Conta Poupança");
-			} else {
-				System.out.println("\nEsse CPF não possui conta corrente cadastrada");
+				temContaPoupanca = true;
 			}
+		}
+
+		// Exibir mensagens de erro separadas
+		if (!temContaCorrente) {
+			System.out.println("\nEsse CPF não possui Conta Corrente cadastrada.");
+		}
+		if (!temContaPoupanca) {
+			System.out.println("\nEsse CPF não possui Conta Poupança cadastrada.");
 		}
 
 		System.out.println("\n-----FIM DA EXIBIÇÃO-----");
@@ -186,7 +198,8 @@ public class ContaControlador {
 
 	public void iniciarAplicacao() {
 		System.out.println("\nDigite o número do CPF: ");
-		String cpf = scan.next();
+		
+		String cpf = scan.nextLine();
 
 		boolean temContaCorrente = false;
 		boolean temContaPoupanca = false;
@@ -197,7 +210,7 @@ public class ContaControlador {
 				for (ContaCorrente achar : listaCC) {
 					if (achar.getCpf().equalsIgnoreCase(cpf)) {
 						temContaCorrente = true;
-						System.out.print("Digite o valor a ser aplicado: R$");
+						System.out.print("\nDigite o valor a ser aplicado: R$");
 						double valor = scan.nextDouble();
 						buscar.aplicar(achar, valor);
 						System.out.println("\n-----DINHEIRO APLICADO COM SUCESSO-----");
@@ -215,6 +228,8 @@ public class ContaControlador {
 			view.Principal.exibirMenu();
 		}
 	}
+	
+	
 
 	/*
 	 * Método que deposita dinheiro na Conta Corrente. Casoo valor seja menor ou

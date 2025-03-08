@@ -2,7 +2,8 @@ package model;
 
 public class ContaCorrente extends Conta implements Tarifavel {
 
-	private double novoSaldo;
+	private double novoSaldo = 0;
+	private static final double taxa = 6.70;
 
 	// Método Construtor.
 
@@ -14,22 +15,13 @@ public class ContaCorrente extends Conta implements Tarifavel {
 	// Método para sacar um determinado valor da conta.
 
 	public void sacar(double valor) {
-		// double dinheiroTotal = aplicarTaxaSaque(6.70)+valor;
-		while (valor + 6.70 > getSaldo()) {
+		while (valor + taxa > getSaldo()) {
 			System.out.print("Valor inválido. Digite novamente: R$");
 			valor = scan.nextDouble();
 		}
-		aplicarTaxaSaque(6.70);
+		aplicarTaxaSaque(taxa);
 		novoSaldo = getSaldo() - valor;
 		alterarSaldo(novoSaldo);
-	}
-
-	// Método serve para transferir um valor da conta corrente para a conta
-	// poupanca.
-
-	public void aplicar(ContaPoupanca destino, double valor) {
-		sacar(valor);
-		destino.depositar(valor);
 	}
 
 	/*
@@ -39,7 +31,8 @@ public class ContaCorrente extends Conta implements Tarifavel {
 
 	@Override
 	public void aplicarTaxaSaque(double valor) {
-		alterarSaldo(getSaldo() - valor);
+		novoSaldo = getSaldo() - valor;
+		alterarSaldo(novoSaldo);
 
 	}
 
