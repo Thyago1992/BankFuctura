@@ -29,6 +29,12 @@ public class ContaControlador {
 
 		String[] primeiroNome = nome.split(" ");
 
+		while (primeiroNome[0].length() < 3) {
+			System.out.print("Nome inválido. Digite novamente: ");
+			nome = scan.nextLine();
+			primeiroNome = nome.split(" ");
+		}
+
 		System.out.print("\nOlá " + primeiroNome[0] + "! Agora digite seu CPF (somente números): ");
 		cpf = scan.nextLine();
 
@@ -128,21 +134,38 @@ public class ContaControlador {
 
 	public void iniciarSaque() {
 		System.out.print("\nDigite o numero da Conta Corrente: ");
-		numeroConta = scan.next();
+		numeroConta = scan.nextLine();
+
+		while (numeroConta.length() != 4) {
+			System.out.print("Número de conta inválido. Digite novamente: ");
+			numeroConta = scan.nextLine();
+		}
+
+		boolean temContaCorrente = false;
 
 		for (ContaCorrente buscar : listaCC) {
 			if (buscar.getNumeroConta().equalsIgnoreCase(numeroConta)) {
 				System.out.print("Digite o valor a ser sacado (Será cobrado uma taxa de R$6,70): R$");
 				valor = scan.nextDouble();
+				scan.nextLine();
 
 				while (valor <= 0) {
 					System.out.print("Valor inválido. Digite novamente: R$");
 					valor = scan.nextDouble();
+					scan.nextLine();
 				}
 				buscar.sacar(valor);
+				temContaCorrente = true;
 			}
 		}
-		System.out.println("\n-----SAQUE REALIZADO COM SUCESSO-----");
+
+		if (!temContaCorrente) {
+			System.out.println("\nConta Corrente não encontrada.");
+			System.out.println("\n-----ERRO DE SAQUE-----");
+		} else {
+			System.out.println("\n-----SAQUE REALIZADO COM SUCESSO-----");
+		}
+
 		view.Principal.exibirMenu();
 	}
 
@@ -153,9 +176,13 @@ public class ContaControlador {
 	 */
 
 	public void iniciarExibicao() {
-		scan.nextLine();
-		System.out.println("\nDigite o seu CPF: ");
+		System.out.print("\nDigite o seu CPF: ");
 		cpf = scan.nextLine();
+
+		while (cpf.length() != 11) {
+			System.out.print("CPF Inválido. Digite novamente: ");
+			cpf = scan.nextLine();
+		}
 
 		boolean temContaCorrente = false;
 		boolean temContaPoupanca = false;
@@ -198,8 +225,12 @@ public class ContaControlador {
 
 	public void iniciarAplicacao() {
 		System.out.println("\nDigite o número do CPF: ");
-		
 		String cpf = scan.nextLine();
+
+		while (cpf.length() != 11) {
+			System.out.print("CPF Inválido. Digite novamente: ");
+			cpf = scan.nextLine();
+		}
 
 		boolean temContaCorrente = false;
 		boolean temContaPoupanca = false;
@@ -212,6 +243,14 @@ public class ContaControlador {
 						temContaCorrente = true;
 						System.out.print("\nDigite o valor a ser aplicado: R$");
 						double valor = scan.nextDouble();
+						scan.nextLine();
+
+						while (valor <= 0) {
+							System.out.print("Valor inválido. Digite novamente: ");
+							valor = scan.nextDouble();
+							scan.nextLine();
+						}
+
 						buscar.aplicar(achar, valor);
 						System.out.println("\n-----DINHEIRO APLICADO COM SUCESSO-----");
 						view.Principal.exibirMenu();
@@ -228,8 +267,6 @@ public class ContaControlador {
 			view.Principal.exibirMenu();
 		}
 	}
-	
-	
 
 	/*
 	 * Método que deposita dinheiro na Conta Corrente. Casoo valor seja menor ou
@@ -240,13 +277,20 @@ public class ContaControlador {
 		System.out.print("\nDigite o número da sua Conta Corrente: ");
 		numeroConta = scan.nextLine();
 
+		while (numeroConta.length() != 4) {
+			System.out.print("Número de conta inválido. Digite novamente: ");
+			numeroConta = scan.nextLine();
+		}
+
 		for (ContaCorrente buscar : listaCC) {
 			if (buscar.getNumeroConta().equalsIgnoreCase(numeroConta)) {
 				System.out.print("Digite o valor a ser depositado: R$");
 				valor = scan.nextDouble();
+				scan.nextLine();
 				while (valor <= 0) {
 					System.out.print("Valor inválido. Digite novamente: R$");
 					valor = scan.nextDouble();
+					scan.nextLine();
 				}
 				buscar.depositar(valor);
 			}
@@ -264,7 +308,12 @@ public class ContaControlador {
 
 	public void iniciarResgate() {
 		System.out.print("\nDigite o numero do seu CPF: ");
-		cpf = scan.next();
+		cpf = scan.nextLine();
+
+		while (cpf.length() != 11) {
+			System.out.print("CPF Inválido. Digite novamente: ");
+			cpf = scan.nextLine();
+		}
 
 		for (ContaPoupanca buscar : listaCP) {
 			if (buscar.getCpf().equalsIgnoreCase(cpf)) {
@@ -272,6 +321,11 @@ public class ContaControlador {
 					if (achar.getCpf().equalsIgnoreCase(cpf)) {
 						System.out.print("Digite o valor a ser resgatado: R$");
 						valor = scan.nextDouble();
+						while (valor <= 0) {
+							System.out.print("Valor inválido. Digite novamente: ");
+							valor = scan.nextDouble();
+							scan.nextLine();
+						}
 						buscar.resgatar(achar, valor);
 					} else {
 						System.out.println("\nEsse CPF não possui Conta Corrente cadastrada.");
